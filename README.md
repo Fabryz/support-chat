@@ -13,7 +13,6 @@ Modules:
 
 * [Socket.io](http://socket.io/)
 * [Express](http://expressjs.com/)
-* [Jade](http://jade-lang.com/) - Actually, that's not mandatory.
 
 Installation
 ----------
@@ -23,6 +22,8 @@ Installation
 3. Start the server with ``node server.js`` or ``nodemon server.js`` if you have it
 4. Point your browser to ``YOUR_SERVER_IP:8080``
 5. Do stuff
+
+Or else check out the demo here: http://support-chat.nodejitsu.com
 
 License
 -------
