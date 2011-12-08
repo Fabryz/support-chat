@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	
+    <title>Support chat</title>
+
+    <link type="text/css" rel="stylesheet" href="./css/style.css" media="screen">
+
+    <script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="./js/chat.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Support chat</h1>
+		<div id="status"></div>
+		<div id="nick"></div>
+		<div id="online">There are <span id="tot">0</span> users online.</div>
+		<div id="chat-wrap">
+			<div id="chatLog"><ul></ul></div>
+			<div id="users"><ul></ul></div>
+		</div>
+		<input type="text" value="" id="chatMsg" name="chatMsg" size="50" maxlength="255" />
+		<div id="talkto">
+			You are talking to:
+			<strong><span id="selected">broadcast</span></strong>
+			<a id="broadcast" href="#" title="Talk to everyone">broadcast</a>
+		</div>
+	</div>
+</body>
+</html>

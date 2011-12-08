@@ -1,0 +1,14 @@
+{
+    "name": "support-chat"
+  , "version": "0.0.1"
+  , "author" : "Fabrizio Codello"
+  , "engines" : {
+    "node" : ">=0.4.12"
+  }
+  , "private": true
+  , "dependencies": {
+      "express": "2.4.3"
+    , "jade": ">= 0.0.1"
+    , "socket.io" : ">=0.8.4"
+  }
+}

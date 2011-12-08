@@ -1,0 +1,42 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#chat-wrap {
+	width: 100%;
+	height: 252px;
+	margin: 10px 0;
+	padding: 0;
+}
+
+#chatLog,
+#users {
+	background-color: #FFFFDD;
+	height: 250px;
+	overflow: auto;
+	border: 1px solid #E3E3E3;
+}
+
+#chatLog {
+	float: left;
+	width: 60%;
+}
+
+#users {
+	float: right;
+	width: 39%;
+}
+
+#chatMsg {
+	font-size: 16px;
+	padding: 8px 5px;
+}
+
+.private {
+	background-color: #CCC;
+}
