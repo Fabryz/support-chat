@@ -38,6 +38,7 @@ $(document).ready(function() {
 	
 	broadcast.bind("click", function() {
 		selected.html('broadcast');
+		chatMsg.focus();
 	});
 
 	/* 
@@ -67,6 +68,7 @@ $(document).ready(function() {
 		});
 		$('.userNick').bind("click", function() {
 			selected.html($(this).text());
+			chatMsg.focus();
 		});
 	});
 
