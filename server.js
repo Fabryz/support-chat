@@ -21,7 +21,7 @@ app.get('/', function(req, res){
 
 app.listen(8080);
 
-console.log('Server started at '+ app.address().address +':'+ app.address().port +' with Node '+ process.version +', platform '+ process.platform +'.');
+console.log('Server started with Node '+ process.version +', platform '+ process.platform +'.');
 
 /*
 * Web Sockets
