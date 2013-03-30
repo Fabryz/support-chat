@@ -15,7 +15,8 @@ $(document).ready(function() {
         online = supportChat.find("#online"),
         total = supportChat.find("#total"),
         selected = supportChat.find("#selected"),
-        broadcast = supportChat.find("#broadcast");
+        broadcast = supportChat.find("#broadcast"),
+        userId = '';
 
     init();
 
@@ -65,17 +66,21 @@ $(document).ready(function() {
     });
 
      socket.on('nick', function(data) {
-        nick.html("You are: "+ data.nick);
+        userId = data.nick;
+
+        nick.html("You are: "+ userId);
     });
 
     socket.on("users", function(data) {
         users.html('');
         data.users.forEach(function(nickname) {
-            users.append('<li><a class="userNick" href="#" title="Send a private message to this user">'+ nickname +'</a></li>');
+            users.append('<li><a class="userNick" href="#" title="'+ (nickname == userId ? "That's you!" : "Send a private message to this user") +'">'+ nickname +'</a></li>');
         });
 
         $('.userNick').on("click", function() {
-            selected.html($(this).text());
+            if ($(this).text() !== userId) {
+                selected.html($(this).text());
+            }
             chatInput.focus();
         });
 
