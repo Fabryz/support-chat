@@ -40,7 +40,7 @@ $(document).ready(function() {
             }
         });
 
-        broadcast.bind("click", function() {
+        broadcast.on('click', function() {
             selected.html('broadcast');
             chatInput.focus();
         });
@@ -82,7 +82,7 @@ $(document).ready(function() {
         nick.html("You are: "+ userId);
     });
 
-    socket.on("users", function(data) {
+    socket.on('users', function(data) {
         users.html('');
         data.users.forEach(function(nickname) {
             users.append('<li><a class="userNick" href="#" title="'+ (nickname == userId ? "That's you!" : "Send a private message to this user") +'">'+ nickname +'</a></li>');
@@ -98,11 +98,11 @@ $(document).ready(function() {
         total.html(data.users.length);
     });
 
-    socket.on("chat", function(data) {
+    socket.on('chat', function(data) {
         writeMessage({ from: data.from, msg: data.msg });
     });
 
-    socket.on("private", function(data) {
+    socket.on('private', function(data) {
         writeMessage({ from: data.from, msg: data.msg, isPrivate: true });
     });
 });
