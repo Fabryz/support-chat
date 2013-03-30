@@ -1,7 +1,14 @@
 Support chat
-======
+============
 
 A simple chat system with private messages, using Node.js and Socket.io
+
+Features:
+
+* Realtime user join/quit events
+* Chat to the whole channel or private chat to a single user
+* Connected users list
+* Anonymous usernames
 
 Requirements
 ------------
@@ -18,27 +25,33 @@ Installation
 ----------
 
 1. Clone the repository with ``git clone git://github.com/Fabryz/support-chat.git support-chat``
-2. Install dependencies with ``npm install -d``
+2. Install dependencies with ``npm install``
 3. Start the server with ``node server.js`` or ``nodemon server.js`` if you have it
 4. Point your browser to ``YOUR_SERVER_IP:8080``
-5. Do stuff
-
-Or else check out the demo here: http://support-chat.nodejitsu.com
+5. Your support chat is ready!
 
 License
 -------
 
-Copyright (C) 2011 Fabrizio Codello
+MIT License
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Copyright (c) 2013 Fabrizio Codello
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

@@ -1,86 +1,83 @@
-var http = require('http'),
-    express = require('express');
-
 /*
-* HTTP Server
+* Express
 */
 
-var app = express.createServer();
+var express = require('express'),
+    socketio = require('socket.io'),
+    http = require('http'),
+    path = require('path');
 
-app.use(express.logger(':remote-addr - :method :url HTTP/:http-version :status :res[content-length] - :response-time ms'));
-app.use(express.static(__dirname + '/public'));
-app.use(express.favicon());
+var app = express();
 
-app.set('view engine', 'jade');
-app.set('view options', { layout: false });
-app.set('views', __dirname + '/views');
+// Configuration
 
-app.get('/', function(req, res){
-    res.render('index.html');
+app.configure(function(){
+    app.set('port', process.env.PORT || 8080);
+    app.use(express.favicon());
+    app.use(express.logger('short'));
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.listen(8080);
+app.configure('development', function(){
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
-console.log('Server started with Node '+ process.version +', platform '+ process.platform +'.');
+app.configure('production', function(){
+    app.use(express.errorHandler());
+});
+
+// Routes
+
+app.get('/', function(req, res) {
+    res.sendfile('public/index.html');
+});
+
+var server = http.createServer(app).listen(app.get('port'), function(){
+  console.log("Express server listening on port "+ app.get('port') +" in "+ app.get('env') +" mode.");
+});
 
 /*
-* Web Sockets
+* Socket.IO
 */
 
-var io = require('socket.io').listen(app),
-	users = [],
- 	totUsers = 0;
-	
-io.configure(function(){ 
-	io.enable('browser client minification');
-	//io.enable('browser client etag'); 
-	io.set('log level', 1); 
-	io.set('transports', [ 
-			'websocket',
-			'flashsocket',
-			'htmlfile',
-			'xhr-polling',
-			'jsonp-polling'
-	]);
-}); 
+var io = socketio.listen(server);
 
+io.configure(function() {
+    io.enable('browser client minification');
+    io.set('log level', 1);
+});
 
-var chat = io.sockets.on('connection', function(client) {
+var users = [];
 
-	users.push(client.id);
+io.sockets.on('connection', function(client) {
 
-	totUsers++;
-	console.log('+ New connection from ' + client.handshake.address.address +':'+ client.handshake.address.port);
-	console.log('+ User '+ client.id +' connected, total users: '+ totUsers);
-	
-	client.emit("nick", { nick: client.id });
-	io.sockets.emit("tot", { tot: totUsers });
-	io.sockets.emit("users", { users: users });
-	
-	client.on("chat", function(data) {		
-		//console.dir(data);
-		io.sockets.emit("chat", { from: client.id, msg: data.msg });
-	});
-	
-	client.on("private", function(data) {		
-		//console.dir(data);
-		io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
-		client.emit("private", { from: client.id, to: data.to, msg: data.msg });
-	});
+    users.push(client.id);
+    console.log('+ User '+ client.id +' connected ('+ client.handshake.address.address +'). Total users: '+ users.length );
 
-	client.on('disconnect', function() {
-		var length = users.length;
-		for(var i = 0; i < length; i++) {
-			if (users[i] === client.id) {
-				users.splice(i, 1);
-				break;
-			}
-		}
+    client.emit("nick", { nick: client.id });
+    io.sockets.emit("users", { users: users });
 
-		totUsers--;
-		io.sockets.emit("tot", { tot: totUsers });
-		io.sockets.emit("users", { users: users });
-		console.log('- User '+ client.id +' disconnected, total users: '+ totUsers);
-	});
+    client.on("chat", function(data) {
+        io.sockets.emit("chat", { from: client.id, msg: data.msg });
+    });
+
+    client.on("private", function(data) {
+        io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
+        client.emit("private", { from: client.id, to: data.to, msg: data.msg });
+    });
+
+    client.on('disconnect', function() {
+        var length = users.length;
+        for(var i = 0; i < length; i++) {
+            if (users[i] === client.id) {
+                users.splice(i, 1);
+                break;
+            }
+        }
+
+        io.sockets.emit("users", { users: users });
+        console.log('- User '+ client.id +' disconnected ('+ client.handshake.address.address +'). Total users: '+ users.length );
+    });
 });
 

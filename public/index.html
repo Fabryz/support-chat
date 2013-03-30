@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-	
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+
     <title>Support chat</title>
+    <meta name="description" content="A simple chat system with private messages, using Node.js and Socket.io">
 
     <link type="text/css" rel="stylesheet" href="./css/style.css" media="screen">
-
-    <script type="text/javascript" src="./js/jquery-1.6.4.min.js"></script>
-    <script type="text/javascript" src="./socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="./js/chat.js"></script>
 </head>
 <body>
-	<div id="wrapper">
-		<h1>Support chat</h1>
-		<div id="status"></div>
-		<div id="nick"></div>
-		<div id="online">There are <span id="tot">0</span> users online.</div>
-		<div id="chat-wrap">
-			<div id="chatLog"><ul></ul></div>
-			<div id="users"><ul></ul></div>
-		</div>
-		<input type="text" value="" id="chatMsg" name="chatMsg" size="50" maxlength="255" />
-		<div id="talkto">
-			You are talking to:
-			<strong><span id="selected">broadcast</span></strong>
-			<a id="broadcast" href="#" title="Talk to everyone">broadcast</a>
-		</div>
-		<a href="https://github.com/Fabryz/support-chat" title="Fork me on GitHub" target="_blank"><img id="ribbon" src="./img/ribbon.png" alt="Fork me on GitHub"></a>
-	</div>
+    <div id="wrapper">
+        <h1>Support chat</h1>
+
+        <div id="support-chat">
+            <div class="info">
+                <div id="status">Connecting...</div>
+                <div id="nick"></div>
+                <div id="online">There are <span id="total">0</span> users online.</div>
+            </div>
+            <div id="logs">
+                <div id="messages"><ul></ul></div>
+                <div id="users"><ul></ul></div>
+            </div>
+            <div class="controls">
+                <input type="text" id="chatInput" name="chatInput" maxlength="255" value="" />
+                <div id="talkto">
+                    You are talking to: <strong><span id="selected">broadcast</span></strong>
+                    <a id="broadcast" href="#" title="Talk to everyone">broadcast</a>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://github.com/Fabryz/support-chat" title="Fork me on GitHub" target="_blank"><img id="ribbon" src="./img/ribbon.png" alt="Fork me on GitHub"></a>
+    </div>
+
+    <script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="./js/support-chat.js"></script>
 </body>
 </html>

@@ -1,44 +1,15 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.clear {
+	clear: both;
 }
 
 a {
-  color: #00B7FF;
-}
-
-#chat-wrap {
-	width: 100%;
-	height: 252px;
-	margin: 10px 0;
-	padding: 0;
-}
-
-#chatLog,
-#users {
-	background-color: #FFFFDD;
-	height: 250px;
-	overflow: auto;
-	border: 1px solid #E3E3E3;
-}
-
-#chatLog {
-	float: left;
-	width: 60%;
-}
-
-#users {
-	float: right;
-	width: 39%;
-}
-
-#chatMsg {
-	font-size: 16px;
-	padding: 8px 5px;
-}
-
-.private {
-	background-color: #CCC;
+  color: #259DFF;
 }
 
 #ribbon {
@@ -47,4 +18,84 @@ a {
 	right: 0;
 	border: 0;
 	z-index: 999;
+}
+
+#wrapper {
+
+}
+
+/*
+* Support Chat
+*/
+
+#support-chat {
+
+}
+
+#support-chat #info {
+
+}
+
+#support-chat #logs {
+	width: 100%;
+	height: 252px;
+	margin: 10px 0;
+	padding: 0;
+}
+
+#support-chat #controls {
+
+}
+
+#support-chat #logs:after,
+#support-chat #controls:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+#support-chat #messages,
+#support-chat #users {
+	background-color: #FFFFDD;
+	height: 250px;
+	overflow: auto;
+	border: 1px solid #E3E3E3;
+}
+
+#support-chat #messages {
+	float: left;
+	width: 60%;
+}
+
+#support-chat #messages ul {
+	list-style-type: none;
+	padding-left: 10px;
+}
+
+#support-chat #users {
+	float: right;
+	width: 39%;
+}
+
+#support-chat #users ul {
+
+}
+
+#support-chat #chatInput {
+	font-size: 16px;
+	margin-right: 10px;
+	padding: 8px 5px;
+	width: 59%;
+	float: left;
+}
+
+#support-chat #talkto {
+	margin-top: 10px;
+	float: left;
+}
+
+#support-chat .private {
+	background-color: #CCC;
 }
