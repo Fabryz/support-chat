@@ -10,6 +10,8 @@ Features:
 * Connected users list
 * Anonymous usernames
 
+![Support Chat](http://i.imgur.com/kJ7RyNR.png "Support Chat")
+
 Requirements
 ------------
 
