@@ -7,6 +7,7 @@ $(document).ready(function() {
     var socket = new io.connect('http://localhost:8080');
 
     var supportChat = $("#support-chat"),
+        messagesWr = supportChat.find("#messages"),
         messages = supportChat.find("#messages ul"),
         chatInput = supportChat.find("#chatInput"),
         status = supportChat.find("#status"),
@@ -56,6 +57,8 @@ $(document).ready(function() {
         } else {
             messages.append('<li class="private">['+ time +'] <em><strong>'+ message.from +'</strong>: '+ message.msg +'</em></li>');
         }
+
+        messagesWr.prop('scrollTop', messagesWr.prop('scrollHeight'));
     }
 
     /*
