@@ -1,6 +1,6 @@
 {
   "name": "support-chat",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "Fabrizio Codello",
   "engines": {
     "node": "0.6.x"
