@@ -27,13 +27,16 @@ $(document).ready(function() {
         chatInput.keydown(function(e) {
             if (e.keyCode === 13) { // Enter
 
-                if (selected.text() == "broadcast") {
-                    socket.emit("chat", { msg: chatInput.val() });
-                } else {
-                    socket.emit("private", { msg: chatInput.val(), to: selected.text() });
-                }
+                if (chatInput.val()) {
 
-                chatInput.val('');
+                    if (selected.text() == "broadcast") {
+                        socket.emit("chat", { msg: chatInput.val() });
+                    } else {
+                        socket.emit("private", { msg: chatInput.val(), to: selected.text() });
+                    }
+
+                    chatInput.val('');
+                }
             }
         });
 
