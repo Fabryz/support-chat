@@ -42,9 +42,14 @@ $(document).ready(function() {
         });
     }
 
+    // If n < 10, add a leading 0
+    function pad(n) {
+      return ( n<10 ? '0'+ n : n);
+    }
+
     function writeMessage(message) {
         var currentDate = new Date(),
-            time = currentDate.getHours() +":"+ currentDate.getMinutes() +":"+ currentDate.getSeconds();
+            time = pad(currentDate.getHours()) +":"+ pad(currentDate.getMinutes()) +":"+ pad(currentDate.getSeconds());
 
         if (! message.isPrivate) {
             messages.append('<li>['+ time +'] <strong>'+ message.from +'</strong>: '+ message.msg +'</li>');
