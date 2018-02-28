@@ -4,7 +4,7 @@
 */
 
 $(document).ready(function() {
-    var socket = new io.connect('http://localhost:8080');
+    var socket = new io.connect('https://mannaggia-alle-lepri-imperiali.herokuapp.com');
 
     var supportChat = $("#support-chat"),
         messagesWr = supportChat.find("#messages"),
