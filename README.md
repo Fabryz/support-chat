@@ -1,43 +1,58 @@
 Support chat
 ============
 
-A simple chat system with private messages, using Node.js and Socket.io
+A simple chat system with private messages, using Node.js and Socket.io.
 
-Features:
+**Note:** This project is meant for educational purposes and is not production safe.
+
+Features
+------------
 
 * Realtime user join/quit events
-* Chat to the whole channel or private chat to a single user
+* Chat with everyone or private chat with a single user
 * Connected users list
 * Anonymous usernames
 
-![Support Chat](http://i.imgur.com/kJ7RyNR.png "Support Chat")
+![Support Chat](https://i.imgur.com/d9WxilA.png "Support Chat")
 
 Requirements
 ------------
 
-* [Node.js](http://nodejs.org/)
+* [Node.js v14](http://nodejs.org/)
 * [Npm](http://npmjs.org/)
+* [NVM](https://github.com/nvm-sh/nvm) (optional)
 
 Modules:
 
-* [Socket.io](http://socket.io/)
-* [Express](http://expressjs.com/)
+* [Socket.io v4](http://socket.io/)
+* [Express v4](http://expressjs.com/)
+* [Nodemon](https://nodemon.io/) (development module)
 
-Installation
-----------
+How to install
+--------------
 
-1. Clone the repository with ``git clone git://github.com/Fabryz/support-chat.git support-chat``
-2. Install dependencies with ``npm install``
-3. Start the server with ``node server.js`` or ``nodemon server.js`` if you have it
-4. Point your browser to ``YOUR_SERVER_IP:8080``
-5. Your support chat is ready!
+1. Clone the repository with:
+
+       $ git clone git://github.com/Fabryz/support-chat.git
+2. Install dependencies:
+
+       $ cd support-chat
+       $ nvm use # only if you have NVM
+       $ npm install
+3. Start the server:
+
+       $ npm run start
+       or
+       $ npm run start:dev
+5. Point your browser to ``http://localhost:8080/`` and open some more tabs.
+6. Your support chat is ready!
 
 License
 -------
 
 MIT License
 
-Copyright (c) 2013 Fabrizio Codello
+Copyright (c) 2022 Fabrizio Codello
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

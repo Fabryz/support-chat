@@ -1,17 +1,36 @@
 {
   "name": "support-chat",
-  "version": "0.1.1",
-  "author": "Fabrizio Codello",
-  "engines": {
-    "node": "6.11.1"
-  },
-  "private": true,
-  "dependencies": {
-    "express": "3.1.x",
-    "socket.io": "0.9.x"
-  },
+  "version": "0.2.0",
+  "description": "A simple support chat system with private messaging",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ENV=production node server.js",
+    "start:dev": "ENV=development nodemon server.js"
   },
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fabryz/support-chat.git"
+  },
+  "keywords": [
+    "chat",
+    "websockets",
+    "socket.io",
+    "express",
+    "tutorial",
+    "example"
+  ],
+  "author": "Fabrizio Codello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Fabryz/support-chat/issues"
+  },
+  "homepage": "https://github.com/Fabryz/support-chat#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }

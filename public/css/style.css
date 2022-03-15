@@ -96,6 +96,14 @@ a {
 	float: left;
 }
 
+#support-chat #talkto #selected {
+	font-weight: bold;
+}
+
+#support-chat #talkto #everyone {
+	display: none;
+}
+
 #support-chat .private {
 	background-color: #CCC;
 }

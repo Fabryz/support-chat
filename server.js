@@ -1,83 +1,77 @@
 /*
-* Express
+* Support Chat
 */
 
-var express = require('express'),
-    socketio = require('socket.io'),
-    http = require('http'),
-    path = require('path');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const path = require('path');
+const util = require('util');
 
-var app = express();
+// Vars
 
-// Configuration
+const port = process.env.PORT || 8080;
 
-app.configure(function(){
-    app.set('port', process.env.PORT || 8080);
-    app.use(express.favicon());
-    app.use(express.logger('short'));
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname, 'public')));
+// Express
+
+const express = require('express'); // FIXME
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve('public/index.html'));
 });
 
-app.configure('development', function(){
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+app.get('/test', (req, res) => {
+  res.send('Hello World!')
+})
+
+// Websockets
+
+http.listen(port, () => {
+  console.log(util.format('Socket.IO server running at http://localhost:%s', port));
 });
 
-app.configure('production', function(){
-    app.use(express.errorHandler());
-});
+// Main
 
-// Routes
+let users = [];
 
-app.get('/', function(req, res) {
-    res.sendfile('public/index.html');
-});
+io.on('connection', (socket) => {
+  users.push(socket.id);
 
-var server = http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port "+ app.get('port') +" in "+ app.get('env') +" mode.");
-});
+  console.log(util.format('+ User "%s" connected. Total users: %s', socket.id, users.length));
 
-/*
-* Socket.IO
-*/
+  socket.emit('nick', {
+    nick: socket.id,
+  });
+  io.emit('users', { users });
 
-var io = socketio.listen(server);
-
-io.configure(function() {
-    io.enable('browser client minification');
-    io.set('log level', 1);
-});
-
-var users = [];
-
-io.sockets.on('connection', function(client) {
-
-    users.push(client.id);
-    console.log('+ User '+ client.id +' connected ('+ client.handshake.address.address +'). Total users: '+ users.length );
-
-    client.emit("nick", { nick: client.id });
-    io.sockets.emit("users", { users: users });
-
-    client.on("chat", function(data) {
-        io.sockets.emit("chat", { from: client.id, msg: data.msg });
+  socket.on('chat-everyone', (data) => {
+    io.emit('chat-everyone', {
+      from: socket.id,
+      msg: data.msg,
     });
+  });
 
-    client.on("private", function(data) {
-        io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
-        client.emit("private", { from: client.id, to: data.to, msg: data.msg });
-    });
+  socket.on('chat-private', (data) => {
+    const payload = {
+      from: socket.id,
+      to: data.to,
+      msg: data.msg
+    };
 
-    client.on('disconnect', function() {
-        var length = users.length;
-        for(var i = 0; i < length; i++) {
-            if (users[i] === client.id) {
-                users.splice(i, 1);
-                break;
-            }
-        }
+    io.to(data.to).emit('chat-private', payload);
 
-        io.sockets.emit("users", { users: users });
-        console.log('- User '+ client.id +' disconnected ('+ client.handshake.address.address +'). Total users: '+ users.length );
-    });
+    socket.emit('chat-private', payload);
+  });
+
+  socket.on('disconnect', () => {
+    const index = users.indexOf(socket.id);
+    if (index > -1) {
+      users.splice(index, 1);
+    }
+
+    io.sockets.emit('users', { users });
+    console.log(util.format('- User "%s" disconnected. Total users: %s', socket.id, users.length));
+  });
 });
 

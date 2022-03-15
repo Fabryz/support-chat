@@ -3,106 +3,148 @@
 * Author: Fabrizio Codello
 */
 
-$(document).ready(function() {
-    var socket = new io.connect('http://localhost:8080');
+// VARS
 
-    var supportChat = $("#support-chat"),
-        messagesWr = supportChat.find("#messages"),
-        messages = supportChat.find("#messages ul"),
-        chatInput = supportChat.find("#chatInput"),
-        status = supportChat.find("#status"),
-        nick = supportChat.find("#nick");
-        users = supportChat.find("#users ul"),
-        online = supportChat.find("#online"),
-        total = supportChat.find("#total"),
-        selected = supportChat.find("#selected"),
-        broadcast = supportChat.find("#broadcast"),
-        userId = '';
+let socket = new io();
 
-    init();
+let supportChat = $("#support-chat");
+let messagesWr = supportChat.find("#messages");
+let messages = supportChat.find("#messages ul");
+let chatInput = supportChat.find("#chatInput");
+let status = supportChat.find("#status");
+let nick = supportChat.find("#nick");
+let users = supportChat.find("#users ul");
+let total = supportChat.find("#total");
+let selected = supportChat.find("#selected");
+let everyone = supportChat.find("#everyone");
 
-    function init() {
-        chatInput.focus();
+let userId = null;
+let chatToEveryone = true;
 
-        chatInput.keydown(function(e) {
-            if (e.keyCode === 13) { // Enter
+// FUNCTIONS
 
-                if (chatInput.val()) {
+const init = () => {
+  chatInput.focus();
 
-                    if (selected.text() == "broadcast") {
-                        socket.emit("chat", { msg: chatInput.val() });
-                    } else {
-                        socket.emit("private", { msg: chatInput.val(), to: selected.text() });
-                    }
-
-                    chatInput.val('');
-                }
-            }
-        });
-
-        broadcast.on('click', function() {
-            selected.html('broadcast');
-            chatInput.focus();
-        });
-    }
-
-    // If n < 10, add a leading 0
-    function pad(n) {
-      return ( n<10 ? '0'+ n : n);
-    }
-
-    function writeMessage(message) {
-        var currentDate = new Date(),
-            time = pad(currentDate.getHours()) +":"+ pad(currentDate.getMinutes()) +":"+ pad(currentDate.getSeconds());
-
-        if (! message.isPrivate) {
-            messages.append('<li>['+ time +'] <strong>'+ message.from +'</strong>: '+ message.msg +'</li>');
+  // Handle the user typing in the input field
+  chatInput.keydown((e) => {
+    if (e.keyCode === 13) { // Enter
+      if (chatInput.val()) {
+        if (chatToEveryone) {
+          socket.emit("chat-everyone", {
+            msg: chatInput.val(),
+          });
         } else {
-            messages.append('<li class="private">['+ time +'] <em><strong>'+ message.from +'</strong>: '+ message.msg +'</em></li>');
+          socket.emit("chat-private", {
+            msg: chatInput.val(),
+            to: selected.text(),
+          });
         }
 
-        messagesWr.prop('scrollTop', messagesWr.prop('scrollHeight'));
+        chatInput.val(''); // Clear the field after the message is sent
+      }
     }
+  });
 
-    /*
-    * WebSocket Events
-    */
+  everyone.on('click', () => {
+    chatToEveryone = true;
+    selected.html('Everyone');
+    $('#everyone').hide();
+    chatInput.focus();
+  });
+}
 
-    socket.on('connect', function() {
-        status.html("Connected.");
+// If n < 10, add a leading 0
+const pad = (n) => {
+  return ( n < 10 ? '0' + n : n);
+}
+
+// Returns a string in the format hh:mm:ss
+const getCurrentTime = () => {
+  const currentDate = new Date();
+
+  return pad(currentDate.getHours()) +":"+ pad(currentDate.getMinutes()) +":"+ pad(currentDate.getSeconds());
+}
+
+// Appends a message to the message list
+// have a different style for private messages
+const addToMessages = (message) => {
+  let time = getCurrentTime();
+
+  if (message.isPrivate) {
+    messages.append('<li class="private">['+ time +'] <em><strong>'+ message.from +'</strong>: '+ message.msg +'</em></li>');
+  } else {
+    messages.append('<li>['+ time +'] <strong>'+ message.from +'</strong>: '+ message.msg +'</li>');
+  }
+
+  // scroll down the message list automatically
+  messagesWr.prop('scrollTop', messagesWr.prop('scrollHeight'));
+}
+
+// MAIN
+
+$(document).ready(() => {
+  init();
+
+  socket.on('connect', () => {
+    status.html('Connected.');
+    console.log('Connected.');
+  });
+
+  socket.on('disconnect', () => {
+    status.html('Disconnected.');
+    console.log('Disconnected.');
+  });
+
+  // User receives his new nickname
+  socket.on('nick', (data) => {
+    userId = data.nick;
+
+    nick.html(userId);
+    console.log('Your nickname is: ' + userId);
+  });
+
+  // User receives the updated users list
+  socket.on('users', (data) => {
+    users.html('');
+    total.html(data.users.length);
+
+    data.users.forEach((nickname) => {
+      if (nickname === userId) {
+        users.append('<li><a class="userNick" href="#" data-userid="'+ nickname +'" title="That\'s you!">'+ nickname +' (You)</a></li>');
+      } else {
+        users.append('<li><a class="userNick" href="#" data-userid="'+ nickname +'" title="Click to send a private message to this user">'+ nickname +'</a></li>');
+      }
     });
 
-    socket.on('disconnect', function() {
-        status.html("Disconnected.");
+    // Handle the click on nicknames
+    $('.userNick').on('click', (e) => {
+      e.preventDefault();
+
+      if ($(e.target).data('userid') !== userId) {
+        chatToEveryone = false;
+        selected.html($(e.target).text());
+        $('#everyone').show();
+      }
+
+      chatInput.focus();
     });
+  });
 
-     socket.on('nick', function(data) {
-        userId = data.nick;
-
-        nick.html("You are: "+ userId);
+  // A new message for everyone has arrived
+  socket.on('chat-everyone', (data) => {
+    addToMessages({
+      from: data.from,
+      msg: data.msg
     });
+  });
 
-    socket.on('users', function(data) {
-        users.html('');
-        data.users.forEach(function(nickname) {
-            users.append('<li><a class="userNick" href="#" title="'+ (nickname == userId ? "That's you!" : "Send a private message to this user") +'">'+ nickname +'</a></li>');
-        });
-
-        $('.userNick').on("click", function() {
-            if ($(this).text() !== userId) {
-                selected.html($(this).text());
-            }
-            chatInput.focus();
-        });
-
-        total.html(data.users.length);
+  // A new private message has arrived
+  socket.on('chat-private', (data) => {
+    addToMessages({
+      from: data.from,
+      msg: data.msg,
+      isPrivate: true
     });
-
-    socket.on('chat', function(data) {
-        writeMessage({ from: data.from, msg: data.msg });
-    });
-
-    socket.on('private', function(data) {
-        writeMessage({ from: data.from, msg: data.msg, isPrivate: true });
-    });
+  });
 });
