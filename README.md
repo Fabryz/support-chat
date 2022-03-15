@@ -6,7 +6,9 @@ A simple chat system with private messages, using Node.js and Socket.io.
 **Note:** This project is meant for educational purposes and is not production safe.
 
 Features
-------------
+--------
+
+Test it yourself with the [working app on Heroku](https://mannaggia-alle-lepri-imperiali.herokuapp.com/)! 
 
 * Realtime user join/quit events
 * Chat with everyone or private chat with a single user
